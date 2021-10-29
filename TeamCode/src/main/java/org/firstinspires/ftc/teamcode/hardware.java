@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -8,18 +10,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class hardware
 {
-    // motoarele rotilor
-    public DcMotor[] motor = new DcMotor[4];
 
-    // motor carusel
-    public DcMotor motorCarusel = null;
+    public DcMotor[] motor = new DcMotor[4]; // motoarele rotilor
+    public DcMotor motorCarusel = null; // motor carusel
+    public DcMotor motorIntake = null; // motor intake
+    public DcMotor motorCuva = null; // motor cuva
 
-    // motor intake
-    public DcMotor motorIntake = null;
+    // encodere odometrie
+    public DcMotor encStanga, encDreapta, encOrizontal;
 
-    // motor cuva
-    public DcMotor motorCuva = null;
-
+    public BNO055IMU imu;
+    public BNO055IMU.Parameters parameters;
 
     public Servo brat = null;
     public Servo gheara = null;
@@ -38,8 +39,21 @@ public class hardware
         this.hardwareMap = hdMap;
         brat = hardwareMap.get(Servo.class, "brat");
         gheara = hardwareMap.get(Servo.class, "gheara");
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         initMotors();
+    }
+
+    private void initializareImu()
+    {
+        parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        imu.initialize(parameters);
     }
 
     private void setDefaultStateMotor(DcMotor motor, String nume, DcMotorSimple.Direction direction)
@@ -62,6 +76,11 @@ public class hardware
 
         // motor brat rata
         setDefaultStateMotor(motorCarusel, "mcarusel", DcMotorSimple.Direction.FORWARD);
+
+        // encodere odometrie
+        setDefaultStateMotor(encStanga, "encstanga", DcMotorSimple.Direction.FORWARD);
+        setDefaultStateMotor(encDreapta, "encdreapta", DcMotorSimple.Direction.FORWARD);
+        setDefaultStateMotor(encOrizontal, "encorizontal", DcMotorSimple.Direction.FORWARD);
 
         // motoare roti
         for (int i = 0; i < motor.length; i++)

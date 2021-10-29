@@ -57,6 +57,7 @@ public class teleop extends LinearOpMode {
     private hardware hardware;
 
 
+    //wheel movement
     private void miscare(float fata, float lateral, float rotire)
     {
         // power applied to the robot wheel by wheel
@@ -127,7 +128,6 @@ public class teleop extends LinearOpMode {
             float outtakeCuva =  gamepad2.left_trigger;
 
 
-
             // moving the robot depending on drivers' requests
             miscare(fata, lateral, rotire);
 
@@ -137,12 +137,6 @@ public class teleop extends LinearOpMode {
             // miscare maturi cuva
             miscaMaturiCuva(intakeCuva, outtakeCuva);
 
-
-
-
-
-
         }
     }
-
 }
