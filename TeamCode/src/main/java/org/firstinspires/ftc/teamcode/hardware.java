@@ -17,6 +17,8 @@ public class hardware
     public DcMotor motorCuva = null; // motor cuva
 
     // encodere odometrie
+    // encoderele par fi conectate la acelasi porturi precum motoarele
+    // li se dau aceleasi nume
     public DcMotor encStanga, encDreapta, encOrizontal;
 
     public BNO055IMU imu;
