@@ -18,20 +18,20 @@ public class PID {
         this.kd = kd;
     }
     public PID(){}
-    public void SetKs(double p, double i, double d)
+    public void setKs(double p, double i, double d)
     {
         this.kp = p;
         this.ki = i;
         this.kd = d;
     }
 
-    public void SetTarget(double target)
+    public void setTarget(double target)
     {
         this.reset();
         this.target=target;
     }
 
-    public  void setBoundaries(double mx, double mn)
+    public void setBoundaries(double mx, double mn)
     {
         this.mx = mx;
         this.mn = mn;

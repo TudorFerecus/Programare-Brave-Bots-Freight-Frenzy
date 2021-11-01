@@ -84,10 +84,10 @@ public class hardware
         // motor brat rata
         setDefaultStateMotor(motorCarusel, "mcarusel", DcMotorSimple.Direction.FORWARD);
 
-        // encodere odometrie
-        setDefaultStateMotor(encStanga, "encstanga", DcMotorSimple.Direction.FORWARD);
-        setDefaultStateMotor(encDreapta, "encdreapta", DcMotorSimple.Direction.FORWARD);
-        setDefaultStateMotor(encOrizontal, "encorizontal", DcMotorSimple.Direction.FORWARD);
+        // encodere odometire (acleasi nume ca primele 3 motoare)
+        setDefaultStateMotor(encStanga, "m0", DcMotorSimple.Direction.FORWARD);
+        setDefaultStateMotor(encDreapta, "m1", DcMotorSimple.Direction.FORWARD);
+        setDefaultStateMotor(encOrizontal, "m3", DcMotorSimple.Direction.FORWARD);
 
         // motoare roti
         for (int i = 0; i < motor.length; i++)
