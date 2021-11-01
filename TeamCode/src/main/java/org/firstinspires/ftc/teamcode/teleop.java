@@ -110,6 +110,7 @@ public class teleop extends LinearOpMode {
     {
         //verify teleop stage
         telemetry.addData("Status", "Initialized");
+        telemetry.update();
 
         // init hardware
         hardware = new hardware(hardwareMap);

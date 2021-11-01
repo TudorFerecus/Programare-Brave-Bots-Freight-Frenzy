@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
@@ -28,12 +29,19 @@ public class odometryCalibration extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //Initialize hardware map values. PLEASE UPDATE THESE VALUES TO MATCH YOUR CONFIGURATION
+
+        // Initialize hardware map values
         hardware = new hardware(hardwareMap);
+
+        // Change left back wheel's direction
+        hardware.motor[3].setDirection(DcMotorSimple.Direction.FORWARD);
+
+        telemetry.addData("Status", "Hardware initialized");
+        telemetry.update();
 
         waitForStart();
 
-        //Begin calibration (if robot is unable to pivot at these speeds, please adjust the constant at the top of the code
+        //Begin calibration
         while(getZAngle() < 90 && opModeIsActive()){
             hardware.motor[0].setPower(-specifications.pivot_speed);
             hardware.motor[1].setPower(-specifications.pivot_speed);
