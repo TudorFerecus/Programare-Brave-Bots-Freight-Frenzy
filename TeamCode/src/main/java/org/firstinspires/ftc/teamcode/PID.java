@@ -11,6 +11,7 @@ public class PID {
 
     private double tolerance = 10;
 
+    //TODO:atuotune alogritm for ki and kd
     public PID(double kp, double ki, double kd)
     {
         this.kp = kp;
@@ -47,10 +48,11 @@ public class PID {
         if(!done()) {
             double error = target - input;
             integral += error * dt;
-            double o = kp * error + ki * integral + kd * (error - prevError) / dt;
+            //reverse error - prevError if robot moves in reverse
+            double o = kp * error + ki * integral * dt + kd * (error - prevError) / dt;
             //oldError = prevError;
             prevError = error;
-            o /= 100;
+            o /= 100; //conversion to mm
             if (o > mx) return mx;
             else if (o < mn) return mn;
             return o;

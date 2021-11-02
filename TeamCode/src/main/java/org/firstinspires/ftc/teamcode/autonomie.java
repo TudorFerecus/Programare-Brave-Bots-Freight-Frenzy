@@ -108,6 +108,7 @@ public class autonomie extends OpMode
         }
     }
 
+    //TODO: should be in pid
     private boolean donexy(double x, double y)
     {
         if(Math.abs(globalX-x) < specifications.pid_eroare_coord && Math.abs(globalY-y) < specifications.pid_eroare_coord)
