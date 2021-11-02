@@ -11,16 +11,18 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class hardware
 {
 
-    public DcMotor[] motor = new DcMotor[4]; // motoarele rotilor
-    public DcMotor motorCarusel = null; // motor carusel
-    public DcMotor motorIntake = null; // motor intake
-    public DcMotor motorCuva = null; // motor cuva
+    //TODO:ordinea in care motoarele sunt luate din hardwareMap
+    public DcMotor[] motor = new DcMotor[4]; //motoarele rotilor
+    public DcMotor motorCarusel = null;
+    public DcMotor motorIntake = null;
+    public DcMotor motorCuva = null;
 
-    // encodere odometrie
-    // encoderele par fi conectate la acelasi porturi precum motoarele
-    // li se dau aceleasi nume
-    public DcMotor encStanga, encDreapta, encOrizontal;
+    //encodere odometrie
+    public DcMotor encStanga;
+    public DcMotor encDreapta;
+    public DcMotor encOrizontal;
 
+    //senzor IMU si parametrii
     public BNO055IMU imu;
     public BNO055IMU.Parameters parameters;
 
@@ -44,9 +46,11 @@ public class hardware
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         initMotors();
+        initImu();
     }
 
-    private void initializareImu()
+    //initialize function for the IMU sensor
+    private void initImu()
     {
         parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -58,6 +62,7 @@ public class hardware
         imu.initialize(parameters);
     }
 
+    //initialize a motor with default values
     private void setDefaultStateMotor(DcMotor motor, String nume, DcMotorSimple.Direction direction)
     {
         motor = hardwareMap.get(DcMotor.class, nume);
@@ -79,10 +84,10 @@ public class hardware
         // motor brat rata
         setDefaultStateMotor(motorCarusel, "mcarusel", DcMotorSimple.Direction.FORWARD);
 
-        // encodere odometrie
-        setDefaultStateMotor(encStanga, "encstanga", DcMotorSimple.Direction.FORWARD);
-        setDefaultStateMotor(encDreapta, "encdreapta", DcMotorSimple.Direction.FORWARD);
-        setDefaultStateMotor(encOrizontal, "encorizontal", DcMotorSimple.Direction.FORWARD);
+        // encodere odometire (acleasi nume ca primele 3 motoare)
+        setDefaultStateMotor(encStanga, "m0", DcMotorSimple.Direction.FORWARD);
+        setDefaultStateMotor(encDreapta, "m1", DcMotorSimple.Direction.FORWARD);
+        setDefaultStateMotor(encOrizontal, "m3", DcMotorSimple.Direction.FORWARD);
 
         // motoare roti
         for (int i = 0; i < motor.length; i++)

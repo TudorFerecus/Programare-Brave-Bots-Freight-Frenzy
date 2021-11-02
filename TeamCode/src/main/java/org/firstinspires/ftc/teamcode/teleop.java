@@ -35,17 +35,54 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
 //@Disabled
+
 public class teleop extends LinearOpMode {
 
     // hardware class instance
     private hardware hardware;
-    private odometry odometry = new odometry(0, 0, 0, hardware);
+    private odometry odometry;
 
+    @Override
+    public void runOpMode()
+    {
+        //verify teleop stage
+        telemetry.addData("Status", "Initialized");
+
+        // init hardware
+        hardware = new hardware(hardwareMap);
+        odometry = new odometry(0, 0, 0, hardware, 1);
+
+        while(opModeIsActive())
+        {
+            odometry.updatePosition();
+
+            // drivers' moving requests
+            float fata = gamepad1.left_stick_y; // forward movement
+            float lateral = gamepad1.left_stick_x; // strafe movement
+            float rotire = gamepad1.right_stick_x; // rotate
+
+            // drivers' intake requests
+            float miscareBratIntake = gamepad2.right_stick_y; //comanda bratului de intake
+            float intakeCuva =  gamepad2.right_trigger;
+            float outtakeCuva =  gamepad2.left_trigger;
+
+
+            // moving the robot depending on drivers' requests
+            miscare(fata, lateral, rotire);
+
+            // miscarea brat intake
+            miscaBratIntake(miscareBratIntake);
+
+            // miscare maturi cuva
+            miscaMaturiCuva(intakeCuva, outtakeCuva);
+
+        }
+    }
 
     //wheel movement
     private void miscare(float fata, float lateral, float rotire)
     {
-        // power applied to the robot wheel by wheel
+        //power for each wheel
         double[] power = new double[4];
 
         power[0] =   (- fata + lateral + rotire)*specifications.moving_speed;   //+
@@ -53,7 +90,7 @@ public class teleop extends LinearOpMode {
         power[2] =   (- fata - lateral + rotire)*specifications.moving_speed;   //-
         power[3] =   (+ fata - lateral + rotire)*specifications.moving_speed;   //+
 
-        // applying the power
+        //apply power
         for(int i=0; i<4; i++)
         {
             hardware.motor[i].setPower(power[i]);
@@ -88,42 +125,6 @@ public class teleop extends LinearOpMode {
         {
             hardware.motorCuva.setDirection(DcMotorSimple.Direction.REVERSE);
             hardware.motorCuva.setPower(outtakeCuva * specifications.motor_cuva_speed);
-        }
-    }
-
-    @Override
-    public void runOpMode()
-    {
-        //verify teleop stage
-        telemetry.addData("Status", "Initialized");
-
-        // init hardware
-        hardware = new hardware(hardwareMap);
-
-        while(opModeIsActive())
-        {
-            odometry.updatePosition();
-
-            // drivers' moving requests
-            float fata = gamepad1.left_stick_y; // forward movement
-            float lateral = gamepad1.left_stick_x; // strafe movement
-            float rotire = gamepad1.right_stick_x; // rotate
-
-            // drivers' intake requests
-            float miscareBratIntake = gamepad2.right_stick_y; //comanda bratului de intake
-            float intakeCuva =  gamepad2.right_trigger;
-            float outtakeCuva =  gamepad2.left_trigger;
-
-
-            // moving the robot depending on drivers' requests
-            miscare(fata, lateral, rotire);
-
-            // miscarea brat intake
-            miscaBratIntake(miscareBratIntake);
-
-            // miscare maturi cuva
-            miscaMaturiCuva(intakeCuva, outtakeCuva);
-
         }
     }
 }
