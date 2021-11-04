@@ -25,4 +25,17 @@ public class specifications
     public static int pid_eroare_unghi = 2;
 
     public static int total_miscari = 2;
+
+    // lista pozitii initiale rata TODO: afla coord
+    public static  int poz_rata_1[] = {100, 100, 0};
+    public static  int poz_rata_2[] = {100, 100, 0};
+    public static  int poz_rata_3[] = {100, 100, 0};
+    public static  int poz_wobble[] = {100, 100, 0};
+
+    public static int distantaMaxRata = 15;
+
+    public static double time_position_2 = 500;
+    public static double time_position_3 = 1000;
+    public static double outtake_time = 1000;
+
 }

@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -33,6 +34,9 @@ public class hardware
 
     private HardwareMap hardwareMap = null;
 
+    // senzor rata
+    public DistanceSensor senzorRata = null;
+
     public ElapsedTime runTime = new ElapsedTime();
 
     public hardware(HardwareMap hdMap)
@@ -46,6 +50,7 @@ public class hardware
         brat = hardwareMap.get(Servo.class, "brat");
         gheara = hardwareMap.get(Servo.class, "gheara");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
+        senzorRata = hardwareMap.get(DistanceSensor.class, "senzor");
 
         initMotors();
         initImu();
