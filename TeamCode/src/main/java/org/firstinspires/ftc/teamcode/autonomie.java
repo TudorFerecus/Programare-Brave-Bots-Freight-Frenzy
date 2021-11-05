@@ -29,6 +29,8 @@ public class autonomie extends OpMode
 
     private double timpInit = -1;
 
+    private DcMotorSimple.Direction sensRoataCarusel = DcMotorSimple.Direction.FORWARD;
+
 
     @Override
     public void init()
@@ -55,6 +57,9 @@ public class autonomie extends OpMode
         brainX.reset();
         brainY.reset();
         brainU.reset();
+
+        //set carusel motor direction
+        hardware.motorCarusel.setDirection(sensRoataCarusel);
     }
 
     @Override
@@ -72,25 +77,22 @@ public class autonomie extends OpMode
         globalU = odometrie.returnOrientation();
 
         //verifica pozitie rata / obiect
-        if(!gasitRata) {
-            go(specifications.poz_rata_1[0], specifications.poz_rata_1[1], specifications.poz_rata_1[2], 0);
-            cautaRata(1, 1);
-            if (pozRata == -1) {
-                go(specifications.poz_rata_2[0], specifications.poz_rata_2[1], specifications.poz_rata_2[2], 2);
-                cautaRata(3, 2);
-            }
-            if (pozRata == -1) {
-                go(specifications.poz_rata_3[0], specifications.poz_rata_3[1], specifications.poz_rata_3[2], 4);
-                cautaRata(5, 3);
-            }
-            gasitRata = true;
-        }
+        gasesteCazulAutonomiei();
+
+        //
         if(gasitRata)
         {
             go(specifications.poz_wobble[0], specifications.poz_wobble[1], specifications.poz_wobble[2], 6);
             ridicareBrat(pozRata, 7);
             punereObiect(8);
         }
+
+        // mergi la carusel
+        go(specifications.poz_carusel[0], specifications.poz_carusel[1], specifications.poz_carusel[2],9);
+
+        //roteste caruselul
+        pornesteRoataCarusel(10);
+
         miscare_robot();
     }
 
@@ -134,10 +136,11 @@ public class autonomie extends OpMode
         }
     }
 
-    private void cautaRata(int index_miscare, int poz)
+    private void cautaRata(int poz, int index_miscare)
     {
         if(moment_miscare == index_miscare)
         {
+            sleep(500); // poate fi scos daca merge greu / nu e nevoie de el
             double distance = hardware.senzorRata.getDistance(DistanceUnit.CM);
             if (distance <= specifications.distantaMaxRata)
             {
@@ -147,11 +150,32 @@ public class autonomie extends OpMode
         }
     }
 
+    private void gasesteCazulAutonomiei()
+    {
+        if(!gasitRata)
+        {
+            go(specifications.poz_rata_1[0], specifications.poz_rata_1[1], specifications.poz_rata_1[2], 0);
+            cautaRata(1, 1);
+
+            if (pozRata == -1)
+            {
+                go(specifications.poz_rata_2[0], specifications.poz_rata_2[1], specifications.poz_rata_2[2], 2);
+                cautaRata(2, 3);
+            }
+            if (pozRata == -1)
+            {
+                go(specifications.poz_rata_3[0], specifications.poz_rata_3[1], specifications.poz_rata_3[2], 4);
+                cautaRata(3, 5);
+            }
+            gasitRata = true;
+        }
+    }
+
     //ridicare brat la un nivel predefinit
     //presupunem ca bratul pleaca de la nivelul 1
     private void ridicareBrat(int pozitie, int index_miscare)
     {
-        if(index_miscare == moment_miscare)
+        if(moment_miscare == index_miscare)
         {
             if(timpInit == -1)
                 timpInit = runTime.milliseconds();
@@ -163,10 +187,12 @@ public class autonomie extends OpMode
                 hardware.motorCuva.setPower(specifications.motor_cuva_speed);
 
             if((timpInit < runTime.milliseconds() - specifications.time_position_3 && pozitie == 3) ||
-                    (timpInit < runTime.milliseconds() - specifications.time_position_3 && pozitie == 3))
+                    (timpInit < runTime.milliseconds() - specifications.time_position_2 && pozitie == 2)||
+                        pozitie == 1 || pozitie == -1)
             {
                 hardware.motorCuva.setPower(0);
                 moment_miscare += 1;
+                timpInit = -1;
             }
 
         }
@@ -175,7 +201,7 @@ public class autonomie extends OpMode
     //lasare obiect din cuva
     private void punereObiect(int index_miscare)
     {
-        if(index_miscare == moment_miscare)
+        if(moment_miscare == index_miscare)
         {
             if(timpInit == -1)
                 timpInit = runTime.milliseconds();
@@ -188,8 +214,28 @@ public class autonomie extends OpMode
             {
                 hardware.motorCuva.setPower(0);
                 moment_miscare += 1;
+                timpInit = -1;
             }
         }
+    }
+
+    private void pornesteRoataCarusel(int index_miscare)
+    {
+        if(index_miscare==moment_miscare)
+        {
+            if(timpInit == -1)
+                timpInit = runTime.milliseconds();
+
+            if (timpInit > runTime.milliseconds() - specifications.time_carusel)
+                hardware.motorCarusel.setPower(specifications.motor_carusel_speed);
+            else
+            {
+                hardware.motorCarusel.setPower(0);
+                moment_miscare +=1;
+                timpInit = -1;
+            }
+        }
+
     }
 
 
@@ -199,4 +245,11 @@ public class autonomie extends OpMode
             return true;
         return false;
     }
+
+    public void sleep(int milis){
+        try {
+            Thread.sleep(milis);
+        } catch (Exception e){}
+    }
+
 }

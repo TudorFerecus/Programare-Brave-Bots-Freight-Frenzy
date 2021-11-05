@@ -11,6 +11,9 @@ public class specifications
     //viteza de tragere/eliminare a obiectelor din cuva
     public static double motor_cuva_speed = 1;
 
+    // viteza motorului carusel
+    public static double motor_carusel_speed = 0.5;
+
     //de cate tick-uri trece un encoder cand robotul se misca un inch
     public static double counts_per_inch = 1103.88170;
 
@@ -26,16 +29,18 @@ public class specifications
 
     public static int total_miscari = 2;
 
-    // lista pozitii initiale rata TODO: afla coord
-    public static  int poz_rata_1[] = {100, 100, 0};
-    public static  int poz_rata_2[] = {100, 100, 0};
-    public static  int poz_rata_3[] = {100, 100, 0};
-    public static  int poz_wobble[] = {100, 100, 0};
+    // lista pozitii TODO: afla coord
+    public static int[] poz_rata_1 = {100, 100, 0};
+    public static int[] poz_rata_2 = {100, 100, 0};
+    public static int[] poz_rata_3 = {100, 100, 0};
+    public static int[] poz_wobble = {100, 100, 0};
+    public static int[] poz_carusel = {100, 100, 0};
 
     public static int distantaMaxRata = 15;
 
     public static double time_position_2 = 500;
     public static double time_position_3 = 1000;
     public static double outtake_time = 1000;
+    public static double time_carusel = 2000;
 
 }

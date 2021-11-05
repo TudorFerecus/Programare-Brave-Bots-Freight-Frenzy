@@ -86,7 +86,7 @@ public class hardware
         // motor brat intake
         setDefaultStateMotor(motorIntake, "mintake", DcMotorSimple.Direction.FORWARD);
 
-        // motor brat rata
+        // motor carusel
         setDefaultStateMotor(motorCarusel, "mcarusel", DcMotorSimple.Direction.FORWARD);
 
         // encodere odometire (acleasi nume ca primele 3 motoare)
